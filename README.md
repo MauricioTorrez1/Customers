@@ -12,3 +12,8 @@ Se implementan las notaciones:
 - @PatchMapping para actualizar parcialmente un recurso
 - @DeleteMapping para eliminar un recurso
 - @RequestMapping a nivel de clase para la unificación de URL´s (endpoints) y a nivel de método para sustituir las notaciones anteriores (get,post,put,etc...)
+
+Software Utilizado:
+- IDE: IntelliJ
+- Framework: SpringBoot
+- API Test: Postman
