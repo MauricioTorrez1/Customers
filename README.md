@@ -11,4 +11,4 @@ Se implementan las notaciones:
 - @PutMapping para actualizar totalmente un recurso
 - @PatchMapping para actualizar parcialmente un recurso
 - @DeleteMapping para eliminar un recurso
-- @RequestMapping para la unificación de URL´s (endpoints)
+- @RequestMapping a nivel de clase para la unificación de URL´s (endpoints) y a nivel de método para sustituir las notaciones anteriores (get,post,put,etc...)
