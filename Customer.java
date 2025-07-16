@@ -1,6 +1,9 @@
 package cursoSpringBoot.domain;
 
-
+//El paquete domain (o a veces llamado model) se refiere al corazón de tu aplicación. 
+//Contiene las clases que representan los conceptos y datos fundamentales de tu negocio.
+//Estas clases no se preocupan por cómo se muestran los datos en una página web o cómo se guardan en una base de datos; 
+//su única responsabilidad es definir la estructura y el comportamiento de los objetos del negocio.
 /*Clase Java tipo POJO, son clases normales que únicamente
 contienen los atributos de un objeto, a su vez los getter y
 setter y por supuesto el constructor o constructores a utilizar
