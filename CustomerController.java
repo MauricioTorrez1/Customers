@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+//Clase donde se implementa la lógica web (@Controller).
 @RestController
 //@RequesMapping permite la unificación de rutas tanto a nivel de método o de clase.
 @RequestMapping("/clientes") //A nivel de clase
