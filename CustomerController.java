@@ -26,8 +26,10 @@ public class CustomerController {
     // @GetMapping("/clientes")
     //@GetMapping unificada con @RequestMapping
     @RequestMapping(method = RequestMethod.GET) //@RequestMapping a nivel de método
-    public List<Customer> getCustomers() {
-        return customers;
+    public ResponseEntity<List<Customer>> getCustomers() {
+
+        return ResponseEntity.ok(customers);//Usando ResponseEntity para un control total sobre la respuesta HTTP
+        //return customers;
     }
 
     /**
@@ -43,60 +45,67 @@ public class CustomerController {
     //Método para recuperar (get o leer) un recurso o coleccion de recursos.
     //@GetMapping("/{username}")
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)//@RequestMapping a nivel de método con parametro web
-    public Customer getCliente(@PathVariable String username){
+    public ResponseEntity<?> getCliente(@PathVariable String username){
         for (Customer c : customers){
             if(c.getUsername().equalsIgnoreCase(username)){
-                return c;
+
+                return ResponseEntity.ok(c);
+                //return c;
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado con username: " + username);//NOT FOUND 404
+        //return null;
     }
     //Nota: Un navegador web (localhost) no puede atender solicitudes del tipo POST se atienden con un probador de API´s en este caso Postman.
     //Método para agregar (create) nuevos clientes a la db
     //@PostMapping
     @RequestMapping(method = RequestMethod.POST)
-    public Customer postCliente(@RequestBody Customer customer){
+    public ResponseEntity<?> postCliente(@RequestBody Customer customer){
         customers.add(customer);
-        return customer;
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado exitosamente: " + customer.getName());
+        //return customer;
 
     }
     // Método para actualizar (update) todos los datos de un cliente dado su ID
     //@PutMapping
     @RequestMapping(method = RequestMethod.PUT)
-    public Customer putCliente(@RequestBody Customer customer){
+    public ResponseEntity<?> putCliente(@RequestBody Customer customer){
         for (Customer c : customers){
             if(c.getID() == customer.getID()){
                 c.setName(customer.getName());
                 c.setUsername(customer.getUsername());
                 c.setPassword(customer.getPassword());
 
-                return c;
+                return ResponseEntity.ok("Cliente modificado satisfactoriamente: " + customer.getUsername());
+
+                //return c;
 
             }
 
         }
-        return null;
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID no encontrado : " + customer.getID());
     }
-    /*
-    Método para eliminar (delete) un cliente dando como
-    parametro el id del cliente a eliminar
-    */
+    
+    //Método para eliminar (delete) un cliente dando como parametro el id del cliente a eliminar
     //@DeleteMapping("/{id}")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Customer deleteCliente(@PathVariable int id){
+    public ResponseEntity<?> deleteCliente(@PathVariable int id){
         for(Customer c : customers){
             if (c.getID() == id){
                 customers.remove(c);
 
-                return c;
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("Cliente eliminado satisfactoriamente: " + id);//No es necesario poner el .body porque se usa el status 204 NOT CONTENT
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado con el ID: " + id);
     }
     // Metodo todo para aplicar modificaciones parciales (patch) a un recurso a diferencia de PUT que reemplaza por completo el recurso.
     //@PatchMapping
     @RequestMapping(method = RequestMethod.PATCH)
-    public Customer patchCliente(@RequestBody Customer customer){
+    public ResponseEntity<?> patchCliente(@RequestBody Customer customer){
         for (Customer c : customers){
             if (c.getID() == customer.getID()){
 
@@ -112,11 +121,11 @@ public class CustomerController {
                     c.setPassword(customer.getPassword());
 
                 }
-                return c;
+                return ResponseEntity.ok("Cliente parcialmente modificado satisfactoriamente con el ID: " + customer.getID());
             }
 
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado con el ID: " + customer.getID());
 
     }
 
