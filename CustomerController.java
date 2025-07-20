@@ -63,7 +63,15 @@ public class CustomerController {
     public ResponseEntity<?> postCliente(@RequestBody Customer customer){
         customers.add(customer);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado exitosamente: " + customer.getName());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()//Permite obtener la URI de la solicitud actual; toma la URL base de la petición
+                .path("/{username}") //Agrega segmento de ruta adicional a la URI base
+                .buildAndExpand(customer.getUsername()) //Tomar el valor proporcionado y lo inserta en la ruta
+                .toUri(); //Finaliza la construccion y convierte la ruta construida en un objeto URI
+
+        //return ResponseEntity.created(location).build(); //Creando y mostrando solo la URL
+        return ResponseEntity.created(location).body(customer); //Creando y monstrando la URL y al JSON con la información del nuevo cliente
+        //return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado exitosamente: " + customer.getName()); *En caso de mostrar un mensaje con .body
         //return customer;
 
     }
@@ -77,15 +85,15 @@ public class CustomerController {
                 c.setUsername(customer.getUsername());
                 c.setPassword(customer.getPassword());
 
-                return ResponseEntity.ok("Cliente modificado satisfactoriamente: " + customer.getUsername());
-
+                return ResponseEntity.noContent().build();
+                //return ResponseEntity.ok("Cliente modificado satisfactoriamente: " + customer.getUsername()); en caso de que quisieramos poner un mensaje
                 //return c;
 
             }
 
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID no encontrado : " + customer.getID());
+        return ResponseEntity.notFound().build();//Sin mensaje solo .build 
+        //return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID no encontrado : " + customer.getID());
     }
     
     //Método para eliminar (delete) un cliente dando como parametro el id del cliente a eliminar
@@ -96,11 +104,10 @@ public class CustomerController {
             if (c.getID() == id){
                 customers.remove(c);
 
-                return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                        .body("Cliente eliminado satisfactoriamente: " + id);//No es necesario poner el .body porque se usa el status 204 NOT CONTENT
+               return ResponseEntity.noContent().build();//No es necesario poner el .body porque se usa el status 204 NOT CONTENT
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado con el ID: " + id);
+        return ResponseEntity.notFound().build();
     }
     // Metodo todo para aplicar modificaciones parciales (patch) a un recurso a diferencia de PUT que reemplaza por completo el recurso.
     //@PatchMapping
